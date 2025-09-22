@@ -44,6 +44,15 @@ Node* insert(Node *root, int val){
     }
 }
 
+// Inorder Traversal of the Tree
+void inorder(Node *root){
+    if(root==NULL) return;
+
+    inorder(root->left);
+    printf("%d ",root->data);
+    inorder(root->right);
+}
+
 // Main Function
 int main(){
     Node *trees[5];
@@ -54,7 +63,8 @@ int main(){
         printf("Select from the Options below : \n");
         printf("1 - Create a new Tree \n");
         printf("2 - Insert into Tree \n");
-        printf("3 - Exit \n");
+        printf("3 - Print Inorder Traversal of Tree \n");
+        printf("4 - Exit \n");
         printf("Enter your choice : ");
         scanf("%d",&select);
 
@@ -67,7 +77,34 @@ int main(){
         }
         
         // Inserting into a Tree
-        else if()
-    }
-}
+        else if(select==2){
+            int num, treein;
+            printf("Enter the ID of the Tree : ");
+            scanf("%d",&treein);
+            if(treein<0 || treein>=treeindex){
+                printf("Invalid Tree ID.\n");
+                continue;
+            }
+            printf("Enter the number of numbers to be inserted : ");
+            scanf("%d",&num);
+            for(int i=0;i<num;i++){
+                int val;
+                printf(" Val - ");
+                scanf("%d",&val);
+                trees[treein] = insert(trees[treein], val);
+            }
+            n++;
+        }
 
+        // Exiting the Program
+        else if(select==3){
+            break;
+        }
+
+        else{
+            printf("Invalid Choice.\n");
+            break;
+        }
+    }
+    return 0;
+}
