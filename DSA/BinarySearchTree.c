@@ -46,5 +46,28 @@ Node* insert(Node *root, int val){
 
 // Main Function
 int main(){
-    Node *root = NULL;
+    Node *trees[5];
+    int select, n=0, treeindex=0;
+
+    // Main Loop
+    while (n<5){
+        printf("Select from the Options below : \n");
+        printf("1 - Create a new Tree \n");
+        printf("2 - Insert into Tree \n");
+        printf("3 - Exit \n");
+        printf("Enter your choice : ");
+        scanf("%d",&select);
+
+        // Creating a new Tree
+        if(select==1){
+            trees[treeindex]=NULL;
+            printf("Tree %d has been created. It is currently empty.\n",treeindex);
+            treeindex++;
+            n++;
+        }
+        
+        // Inserting into a Tree
+        else if()
+    }
+}
 
