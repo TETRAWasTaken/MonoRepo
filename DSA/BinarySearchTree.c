@@ -96,14 +96,30 @@ int main(){
             n++;
         }
 
-        // Exiting the Program
+        // Inorder Traversal of a Tree
         else if(select==3){
+            int treein;
+            printf("Enter the ID of the Tree : ");
+            scanf("%d",&treein);
+            if(treein<0 || treein>=treeindex){
+                printf("Invalid Tree ID.\n");
+                continue;
+            }
+            printf("Inorder Traversal of Tree %d : ",treein);
+            inorder(trees[treein]);
+            printf("\n");
+            n++;
+        }
+
+        // Exiting the Program
+        else if(select==4){1
+            
             break;
         }
 
         else{
             printf("Invalid Choice.\n");
-            break;
+            n++;
         }
     }
     return 0;
