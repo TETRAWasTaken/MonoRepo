@@ -36,26 +36,17 @@ Node* search(Node *root, int val){
 
 // Inserting a Node in the tree
 Node* insert(Node *root, int val){
-    // Creating a new Node
-    Node *newNode = createNode(val);
-
-    // Checking is the Tree is Empty
-    if(root==NULL){
-        root=newNode;
-        return root;
+    if(root == NULL){
+        return createNode(val);
     }
-
-    // Finding the best location for the Node
-    
-    if(root->data<val){
+    if(root->data < val){
         root->right = insert(root->right, val);
     }
-    else if(root->data>val){
+    else if(root->data > val){
         root->left = insert(root->left, val);
     }
-    else {
-        return root;
-    }
+    // If value already exists, do nothing
+    return root;
 }
 
 // Inorder Traversal of the Tree
@@ -87,11 +78,11 @@ void preorder(Node *root){
 
 // Main Function
 int main(){
-    Node *trees[5];
+    Node *trees[5]; // Array to hold multiple trees
     int select, n=0, treeindex=0;
 
     // Main Loop
-    while (n<5){
+    while (n>=0){
         printf("Select from the Options below : \n");
         printf("1 - Create a new Tree \n");
         printf("2 - Insert into Tree \n");
