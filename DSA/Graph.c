@@ -69,8 +69,24 @@ void printGraph(Graph* graph) {
 // Deletes a vertex and all associated edges
 void deleteVertex(Graph* graph, int v) {
     AdjList* pCrawl = graph->array[v];
-    while (pCrawl) {
+    while (pCrawl){
+        int adjVertex = pCrawl->dest;
+
+        // Remove edge from adjVertex to v
+        AdjList* curr = graph->array[adjVertex];
+        AdjList* prev = NULL;
         
+        while(curr) {
+            if (curr->dest == v) {
+                if (prev) {
+                    prev->next = curr->next;
+                } else {
+                    graph->array[adjVertex] = curr->next;
+                }
+                free(curr);
+                break;
+            }
+        }
     }
 }
 
