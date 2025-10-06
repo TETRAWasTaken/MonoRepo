@@ -10,10 +10,12 @@ typedef struct adjlist {
 } AdjList;
 
 // Define the structure for a Graph
+// Each Graph contains an array of adjacency lists
 typedef struct graph {
     int vertex;
     struct AdjList** array;
 } Graph;
+
 
 // Function to create a new adjacency list node
 AdjList* newAdjListNode(int dest) {
@@ -61,6 +63,14 @@ void printGraph(Graph* graph) {
             pCrawl = pCrawl->next;
         }
         printf("\n");
+    }
+}
+
+// Deletes a vertex and all associated edges
+void deleteVertex(Graph* graph, int v) {
+    AdjList* pCrawl = graph->array[v];
+    while (pCrawl) {
+        
     }
 }
 
