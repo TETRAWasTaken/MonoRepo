@@ -41,6 +41,21 @@ Graph* createGraph(int V) {
     return graph;
 }
 
+// Function to add a vertex to the graph
+void addVertex(Graph* graph) {
+    int V = graph->vertex;
+    AdjList** newArray = (AdjList**)realloc(graph->array, (V + 1) * sizeof(AdjList*));
+    if (newArray == NULL) {
+        printf("Failed to allocate memory for new vertex.\n");
+        return;
+    }
+    graph->array = newArray;
+    graph->vertex = V + 1;
+    graph->array[V] = NULL;
+    printf("Vertex added. New number of vertices: %d\n", graph->vertex);
+}
+
+// Function to add an edge to the graph
 void AddEdge(Graph* graph, int src, int dest) {
     // Add an edge from src to dest
     AdjList* newNode = newAdjListNode(dest);
@@ -51,6 +66,46 @@ void AddEdge(Graph* graph, int src, int dest) {
     newNode = newAdjListNode(src);
     newNode->next = graph->array[dest];
     graph->array[dest] = newNode;
+}
+
+// Function to delete an edge from the graph
+void deleteEdge(Graph* graph, int src, int dest) {
+    // Remove edge from src to dest
+    AdjList *pCrawl = graph->array[src];
+    AdjList *prev = NULL;
+
+    while (pCrawl != NULL && pCrawl->dest != dest) {
+        prev = pCrawl;
+        pCrawl = pCrawl->next;
+    }
+
+    if (pCrawl != NULL) {
+        if (prev != NULL) {
+            prev->next = pCrawl->next;
+        } else {
+            graph->array[src] = pCrawl->next;
+        }
+        free(pCrawl);
+    }
+
+    // Since the graph is undirected, remove edge from dest to src
+    pCrawl = graph->array[dest];
+    prev = NULL;
+
+    while (pCrawl != NULL && pCrawl->dest != src) {
+        prev = pCrawl;
+        pCrawl = pCrawl->next;
+    }
+
+    if (pCrawl != NULL) {
+        if (prev != NULL) {
+            prev->next = pCrawl->next;
+        } else {
+            graph->array[dest] = pCrawl->next;
+        }
+        free(pCrawl);
+    }
+    printf("Edge between %d and %d deleted.\n", src, dest);
 }
 
 // Function to print the adjacency list representation of the graph
@@ -68,6 +123,11 @@ void printGraph(Graph* graph) {
 
 // Deletes a vertex and all associated edges
 void deleteVertex(Graph* graph, int v) {
+    if (v >= graph->vertex) {
+        printf("Vertex %d does not exist.\n", v);
+        return;
+    }
+
     AdjList* pCrawl = graph->array[v];
     while (pCrawl){
         int adjVertex = pCrawl->dest;
@@ -75,7 +135,7 @@ void deleteVertex(Graph* graph, int v) {
         // Remove edge from adjVertex to v
         AdjList* curr = graph->array[adjVertex];
         AdjList* prev = NULL;
-        
+
         while(curr) {
             if (curr->dest == v) {
                 if (prev) {
@@ -86,23 +146,97 @@ void deleteVertex(Graph* graph, int v) {
                 free(curr);
                 break;
             }
+            prev = curr;
+            curr = curr->next;
         }
+        pCrawl = pCrawl->next;
     }
+
+    // Free the adjacency list of vertex v
+    pCrawl = graph->array[v];
+    while(pCrawl) {
+        AdjList* temp = pCrawl;
+        pCrawl = pCrawl->next;
+        free(temp);
+    }
+    graph->array[v] = NULL;
+    printf("Vertex %d deleted.\n", v);
 }
 
 int main() {
-    int V = 5; // Number of vertices
-    Graph* graph = createGraph(V);
-    AddEdge(graph, 0, 1);
-    AddEdge(graph, 0, 4);
-    AddEdge(graph, 1, 2);
-    AddEdge(graph, 1, 3);
-    AddEdge(graph, 1, 4);
-    AddEdge(graph, 2, 3);
-    AddEdge(graph, 3, 4);
+    int V = 0;
+    int choice = 0;
+    int src = 0;
+    int dest = 0;
+    Graph* graph = NULL;
 
-    // Print the adjacency list representation of the graph
-    printGraph(graph);
+    printf("Enter the initial number of vertices: ");
+    scanf("%d", &V);
+    graph = createGraph(V);
 
+    while (1) {
+        printf("\n--- Graph Menu ---\n");
+        printf("1. Add Vertex\n");
+        printf("2. Add Edge\n");
+        printf("3. Delete Vertex\n");
+        printf("4. Delete Edge\n");
+        printf("5. Print Graph\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addVertex(graph);
+                break;
+            case 2:
+                printf("Enter source and destination vertices for the new edge: ");
+                scanf("%d %d", &src, &dest);
+                if (src >= graph->vertex || dest >= graph->vertex || src < 0 || dest < 0) {
+                    printf("Invalid vertex.\n");
+                } else {
+                    AddEdge(graph, src, dest);
+                    printf("Edge added between %d and %d.\n", src, dest);
+                }
+                break;
+            case 3:
+                printf("Enter vertex to delete: ");
+                scanf("%d", &src);
+                 if (src >= graph->vertex || src < 0) {
+                    printf("Invalid vertex.\n");
+                } else {
+                    deleteVertex(graph, src);
+                }
+                break;
+            case 4:
+                printf("Enter source and destination vertices of the edge to delete: ");
+                scanf("%d %d", &src, &dest);
+                if (src >= graph->vertex || dest >= graph->vertex || src < 0 || dest < 0) {
+                    printf("Invalid vertex.\n");
+                } else {
+                    deleteEdge(graph, src, dest);
+                }
+                break;
+            case 5:
+                printGraph(graph);
+                break;
+            case 6:
+                // Free the graph memory
+                for (int i = 0; i < graph->vertex; i++) {
+                    AdjList* pCrawl = graph->array[i];
+                    while (pCrawl) {
+                        AdjList* temp = pCrawl;
+                        pCrawl = pCrawl->next;
+                        free(temp);
+                    }
+                }
+                free(graph->array);
+                free(graph);
+                printf("Exiting program.\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
     return 0;
 }
