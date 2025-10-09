@@ -1,21 +1,5 @@
 // Created by Anshumaan Soni on 29/09/25.
-
-#include "stdio.h"
-#include "stdlib.h"
-
-// Define the structure for Adjacency List
-typedef struct adjlist {
-    int dest;
-    struct adjlist* next;
-} AdjList;
-
-// Define the structure for a Graph
-// Each Graph contains an array of adjacency lists
-typedef struct graph {
-    int vertex;
-    struct AdjList** array;
-} Graph;
-
+#include "Graph.h"
 
 // Function to create a new adjacency list node
 AdjList* newAdjListNode(int dest) {
@@ -57,6 +41,16 @@ void addVertex(Graph* graph) {
 
 // Function to add an edge to the graph
 void AddEdge(Graph* graph, int src, int dest) {
+    // Check if the edge already exists
+    AdjList* pCrawl = graph->array[src];
+    while (pCrawl != NULL) {
+        if (pCrawl->dest == dest) {
+            printf("Edge between %d and %d already exists.\n", src, dest);
+            return;
+        }
+        pCrawl = pCrawl->next;
+    }
+
     // Add an edge from src to dest
     AdjList* newNode = newAdjListNode(dest);
     newNode->next = graph->array[src];
@@ -114,7 +108,7 @@ void printGraph(Graph* graph) {
         AdjList* pCrawl = graph->array[v];
         printf("\n Adjacency list of vertex %d\n head ", v);
         while (pCrawl) {
-            printf("-> %d", pCrawl->dest);
+            printf(" -> %d", pCrawl->dest);
             pCrawl = pCrawl->next;
         }
         printf("\n");
