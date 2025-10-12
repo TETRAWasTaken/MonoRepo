@@ -5,16 +5,16 @@
 #include "stdlib.h"
 
 // Define the structure for Adjacency List
-typedef struct adjlist {
+typedef struct AdjList {
     int dest;
-    struct adjlist* next;
+    struct AdjList* next;
 } AdjList;
 
 // Define the structure for a Graph
 // Each Graph contains an array of adjacency lists
-typedef struct graph {
+typedef struct Graph {
     int vertex;
-    struct AdjList** array;
+    AdjList** array;
 } Graph;
 
 // Function prototypes
