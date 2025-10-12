@@ -157,10 +157,12 @@ void deleteVertex(Graph* graph, int v) {
     printf("Vertex %d deleted.\n", v);
 }
 
+// Function to return the Adjacency List of the said node
 AdjList* returnList(int node, Graph* graph) {
     return graph->array[node];
 }
 
+// Function to free the memory of the Graph
 void freeGraph(Graph* graph) {
     for (int i = 0; i < graph->vertex; i++) {
         AdjList* pCrawl = graph->array[i];

@@ -2,7 +2,7 @@
 #include "BFS_Graph.h"
 
 void BFS(Graph* graph, int start) {
-    if (graph ==NULL || start < 0 || start >= graph->vertex) {
+    if (graph == NULL || start < 0 || start >= graph->vertex) {
         printf("Invalid Graph\n");
         return;
     }
@@ -20,7 +20,7 @@ void BFS(Graph* graph, int start) {
     visited[start] = true;
     enqueue(queue, start);
 
-    printf("----- BFS -----\n");
+    printf("\n----- BFS -----\n");
     while (!isempty(queue)) {
         int current = dequeue(queue);
         printf("%d -> ", current);
@@ -34,6 +34,7 @@ void BFS(Graph* graph, int start) {
             pCrawl = pCrawl->next;
         }
     }
+    printf("\n");
     printf("----- Exiting BFS -----\n");
 
     freeQueue(queue);
@@ -78,11 +79,12 @@ int main() {
 
     // Logic Flow
     while (1) {
-        printf("----- Menu ------\n");
+        printf("\n----- Menu ------\n");
         printf(" 1 - Adjacency List\n");
         printf(" 2 - Breadth First Search\n");
         printf(" -1 - Exit\n");
         scanf("%d", &select);
+        printf("\n");
         if (select == 1) {
             printGraph(myGraph);
         }
