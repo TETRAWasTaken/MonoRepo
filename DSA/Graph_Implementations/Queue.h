@@ -19,3 +19,11 @@ typedef struct Queue {
 
 // Function Prototypes
 Queue* createQueue();
+bool isempty(Queue* q);
+void enqueue(Queue* q, int value);
+int dequeue(Queue* q);
+int front(Queue* q);
+void display(Queue* q);
+void freeQueue(Queue* q);
+
+#endif // QUEUE_H

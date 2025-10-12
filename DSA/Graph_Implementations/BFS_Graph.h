@@ -7,3 +7,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+void BFS(Graph* graph, int start);
+
+#endif //BFS_GRAPH_H

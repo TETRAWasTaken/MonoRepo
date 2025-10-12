@@ -25,5 +25,7 @@ void AddEdge(Graph* graph, int src, int dest);
 void deleteEdge(Graph* graph, int src, int dest);
 void printGraph(Graph* graph);
 void deleteVertex(Graph* graph, int v);
+AdjList* returnList(int node, Graph* graph);
+void freeGraph(Graph* graph);
 
 #endif //GRAPH_H

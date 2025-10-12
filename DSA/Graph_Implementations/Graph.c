@@ -157,6 +157,23 @@ void deleteVertex(Graph* graph, int v) {
     printf("Vertex %d deleted.\n", v);
 }
 
+AdjList* returnList(int node, Graph* graph) {
+    return graph->array[node];
+}
+
+void freeGraph(Graph* graph) {
+    for (int i = 0; i < graph->vertex; i++) {
+        AdjList* pCrawl = graph->array[i];
+        while (pCrawl) {
+            AdjList* temp = pCrawl;
+            pCrawl = pCrawl->next;
+            free(temp);
+        }
+    }
+    free(graph->array);
+    free(graph);
+}
+
 int main() {
     int V = 0;
     int choice = 0;
@@ -216,16 +233,7 @@ int main() {
                 break;
             case 6:
                 // Free the graph memory
-                for (int i = 0; i < graph->vertex; i++) {
-                    AdjList* pCrawl = graph->array[i];
-                    while (pCrawl) {
-                        AdjList* temp = pCrawl;
-                        pCrawl = pCrawl->next;
-                        free(temp);
-                    }
-                }
-                free(graph->array);
-                free(graph);
+                freeGraph(graph);
                 printf("Exiting program.\n");
                 return 0;
             default:
