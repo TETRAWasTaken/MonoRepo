@@ -28,6 +28,32 @@ void bubbleSort(int arr[], int k){
     }
 }
 
+void selectionSort(int arr[], int k){
+    int i, j, var;
+    for(i=0; i<k; i++){
+        var = i;
+        for(j=i; j<k; j++){
+            if(arr[j]<=arr[var]){
+                var = j;
+            }
+        }
+        int temp = arr[var];
+        arr[var] = arr[i];
+        arr[i] = temp;
+    }
+}
+
+void insertionSort(int arr[], int k){
+    int i, key, j;
+    for (i=0; i<k; i++){
+        key = arr[i];
+        for (j=i-1; j>=0 && arr[j] > key; j--){
+            arr[j+1] = arr[j];
+        }
+        arr[j+1] = key;
+    }
+}
+
 int main() {
     int *arr, k;
     printf("Enter the Number of elements : ");
@@ -45,6 +71,6 @@ int main() {
     }
 
     // Calling the functions 
-    bubbleSort(arr, k);
-    printarr(arr, k);r
+    insertionSort(arr, k);
+    printarr(arr, k);
 }
