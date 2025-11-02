@@ -54,6 +54,8 @@ void insertionSort(int arr[], int k){
     }
 }
 
+
+
 int main() {
     int *arr, k;
     printf("Enter the Number of elements : ");
@@ -73,4 +75,6 @@ int main() {
     // Calling the functions 
     insertionSort(arr, k);
     printarr(arr, k);
+
+    free(arr);
 }
