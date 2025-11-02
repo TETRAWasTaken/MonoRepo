@@ -17,21 +17,20 @@ void DFS(Graph* graph, int start) {
 
     // DFS Logic Flow
     push(stack, start);
+    visited[start] = true;
 
     printf("\n----- DFS -----\n");
     while (!isEmpty(stack)) {
         int current = takeout(stack);
-        if (!visited[current]) {
-            visited[current] = true;
-            printf("%d -> ", current);
-            AdjList* pCrawl = returnList(current, graph);
-            while (pCrawl != NULL) {
-                int neighbour = pCrawl->dest;
-                if (!visited[neighbour]) {
-                    push(stack, neighbour);
-                }
-                pCrawl = pCrawl->next;
+        printf("%d -> ", current);
+        AdjList* pCrawl = returnList(current, graph);
+        while (pCrawl != NULL) {
+            int neighbour = pCrawl->dest;
+            if (!visited[neighbour]) {
+                push(stack, neighbour);
+                visited[neighbour] = true;
             }
+            pCrawl = pCrawl->next;
         }
     }
     printf("\n");

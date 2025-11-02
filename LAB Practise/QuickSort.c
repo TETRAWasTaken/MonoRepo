@@ -70,5 +70,4 @@ int main(){
 
     quickSort(arr, 0, k-1, 1);
     printarr(arr, k);
-
 }

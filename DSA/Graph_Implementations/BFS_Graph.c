@@ -17,8 +17,8 @@ void BFS(Graph* graph, int start) {
     }
 
     // BFS Logic Flow
-    visited[start] = true;
     enqueue(queue, start);
+    visited[start] = true;
 
     printf("\n----- BFS -----\n");
     while (!isempty(queue)) {
