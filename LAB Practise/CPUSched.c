@@ -8,7 +8,7 @@ typedef struct {
     int pid;
     int arrival_time;
     int burst_time;
-    int remaining_burst_time; // Add remaining_burst_time
+    int remaining_burst_time; // Add to store original burst time
     int waiting_time;
     int turnaround_time;
     int completion_time;
@@ -206,56 +206,52 @@ void SJF(Process processes[], int n, Queue* q) {
 void RoundRobin(Process processes[], int n, int time_quantum, Queue* q) {
     int current_time = 0;
     int completed = 0;
-    int total_idle_time = 0;
+    int process_idx = 0;
 
-    // Initially enqueue all processes that arrive at time 0
-    for (int i = 0; i < n; i++) {
-        if (processes[i].arrival_time <= current_time && !processes[i].is_in_queue) {
-            enqueue(q, &processes[i]);
-            processes[i].is_in_queue = 1;
-        }
+    // Initially enqueue the first process that has arrived
+    while(process_idx < n && processes[process_idx].arrival_time <= current_time) {
+        enqueue(q, &processes[process_idx]);
+        processes[process_idx].is_in_queue = 1;
+        process_idx++;
     }
 
-    while (completed < n) {
-        if (isEmpty(q)) {
+    while (completed < n){
+        if(isEmpty(q)) {
             current_time++;
-            total_idle_time++;
             // Check for new arrivals during idle time
-            for (int i = 0; i < n; i++) {
-                if (processes[i].arrival_time <= current_time && !processes[i].is_in_queue) {
-                    enqueue(q, &processes[i]);
-                    processes[i].is_in_queue = 1;
-                }
+            while(process_idx < n && processes[process_idx].arrival_time <= current_time) {
+                enqueue(q, &processes[process_idx]);
+                processes[process_idx].is_in_queue = 1;
+                process_idx++;
             }
             continue;
         }
 
         Process* current_process = dequeue(q);
+        
         printf("\nProcessing PID: %d at time %d\n", current_process->pid, current_time);
-
         int exec_time = (current_process->remaining_burst_time > time_quantum) ? time_quantum : current_process->remaining_burst_time;
-
+        
         current_process->remaining_burst_time -= exec_time;
         current_time += exec_time;
 
-        // Check for new arrivals during the execution of the current process
-        for (int i = 0; i < n; i++) {
-            if (processes[i].arrival_time > (current_time - exec_time) && processes[i].arrival_time <= current_time && !processes[i].is_in_queue) {
-                enqueue(q, &processes[i]);
-                processes[i].is_in_queue = 1;
-            }
+        // Check for new arrivals during the last time slice
+        while(process_idx < n && processes[process_idx].arrival_time <= current_time) {
+            enqueue(q, &processes[process_idx]);
+            processes[process_idx].is_in_queue = 1;
+            process_idx++;
         }
 
         if (current_process->remaining_burst_time == 0) {
-            completed++;
             current_process->completion_time = current_time;
             current_process->turnaround_time = current_process->completion_time - current_process->arrival_time;
             current_process->waiting_time = current_process->turnaround_time - current_process->burst_time;
             current_process->is_completed = true;
+            completed++;
             printf("Completed PID: %d at time %d\n", current_process->pid, current_time);
         } else {
-            // Re-enqueue the process if it's not finished
-            enqueue(q, current_process);
+            // Re-enqueue the process at the end of the ready queue
+            enqueue(q, current_process); 
         }
     }
 
@@ -300,7 +296,7 @@ int main() {
         processes[i].pid = i + 1;
         processes[i].arrival_time = rand() % 10;
         processes[i].burst_time = (rand() % 10) + 1;
-        processes[i].remaining_burst_time = processes[i].burst_time;
+        processes[i].remaining_burst_time = processes[i].burst_time; // Initialize remaining time
         processes[i].waiting_time = 0;
         processes[i].turnaround_time = 0;
         processes[i].completion_time = 0;
